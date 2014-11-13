@@ -1,4 +1,4 @@
 HirenzBoot
 ==========
 
-Site web permettant de générer des ISOs bootables de Windows 7/8 et Linux avec packages personnalisés.
+HirenzBoot is a website allowing people to generate bootable ISOs from Windows 7/8 or Linux with custom recovery packages.
