@@ -1,4 +1,4 @@
-HirenzBoot
+HirensBoot
 ==========
 
-HirenzBoot is a website allowing people to generate bootable ISOs from Windows 7/8 or Linux with custom recovery packages.
+HirensBoot is a website allowing people to generate bootable ISOs from Windows 8 with custom recovery packages.
