@@ -1,0 +1,23 @@
+<h1>Listing windows_images</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @windows_images.each do |windows_image| %>
+      <tr>
+        <td><%= link_to 'Show', windows_image %></td>
+        <td><%= link_to 'Edit', edit_windows_image_path(windows_image) %></td>
+        <td><%= link_to 'Destroy', windows_image, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Windows image', new_windows_image_path %>
