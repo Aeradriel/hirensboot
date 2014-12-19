@@ -1,9 +1,17 @@
 Rails.application.routes.draw do
-  resources :windows_images
-
   devise_for :users
 
-  root 'windows_images#index'
+  authenticate :user do
+    root 'windows_images#index', as: 'unauthenticated_root'
+    resources :windows_images
+  end
+
+  unauthenticated :user do
+    scope :devise do
+      root 'devise/sessions#new', as: 'authenticated_root'
+    end
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
