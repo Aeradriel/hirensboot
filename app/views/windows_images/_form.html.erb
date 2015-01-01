@@ -1,17 +1,30 @@
 <%= form_for(@windows_image) do |f| %>
-  <% if @windows_image.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@windows_image.errors.count, "error") %> prohibited this windows_image from being saved:</h2>
+    <% if @windows_image.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@windows_image.errors.count, "error") %> prohibited this windows_image from being saved:</h2>
 
+          <ul>
+            <% @windows_image.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="fields">
       <ul>
-      <% @windows_image.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <li class="field">
+          <%= f.label 'Nom', :name %>
+          <%= f.text_field :name %>
+        </li>
+        <li class="field">
+          <%= label_tag 'Programmes', :binaries %>
+          <%= select_tag :binaries, grouped_options_for_select(%w(Lol Lil)), multiple: true %>
+        </li>
       </ul>
     </div>
-  <% end %>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
 <% end %>

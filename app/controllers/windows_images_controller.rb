@@ -15,6 +15,7 @@ class WindowsImagesController < ApplicationController
   # GET /windows_images/new
   def new
     @windows_image = WindowsImage.new
+    @binaries = []
   end
 
   # GET /windows_images/1/edit
