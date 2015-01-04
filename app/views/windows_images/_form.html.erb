@@ -19,7 +19,7 @@
         </li>
         <li class="field">
           <%= label_tag 'Programmes', :binaries %>
-          <%= select_tag :binaries, grouped_options_for_select(%w(Lol Lil)), multiple: true %>
+          <%= select_tag :binaries, options_for_select(%w(Lol Lil)), multiple: true %>
         </li>
       </ul>
     </div>
