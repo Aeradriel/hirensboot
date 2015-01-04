@@ -1,0 +1,17 @@
+<%= form_for(@binary) do |f| %>
+  <% if @binary.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@binary.errors.count, "error") %> prohibited this binary from being saved:</h2>
+
+      <ul>
+      <% @binary.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

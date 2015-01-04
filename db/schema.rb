@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141230181339) do
+ActiveRecord::Schema.define(version: 20150104150826) do
+
+  create_table "binaries", force: true do |t|
+    t.string   "path"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -30,6 +37,13 @@ ActiveRecord::Schema.define(version: 20141230181339) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "win_img_binaries", force: true do |t|
+    t.integer  "windows_image_id"
+    t.integer  "binary_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "windows_images", force: true do |t|
     t.datetime "created_at"

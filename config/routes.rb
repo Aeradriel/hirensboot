@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :binaries
+
   devise_for :users
 
   authenticate :user do
