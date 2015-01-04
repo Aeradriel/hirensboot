@@ -26,15 +26,18 @@ class BinariesController < ApplicationController
   def create
     @binary = Binary.new(binary_params)
 
-    respond_to do |format|
-      if @binary.save
-        format.html { redirect_to @binary, notice: 'Binary was successfully created.' }
-        format.json { render :show, status: :created, location: @binary }
-      else
-        format.html { render :new }
-        format.json { render json: @binary.errors, status: :unprocessable_entity }
-      end
+    begin
+      name = params[:binary][:path].original_filename + '_' + Time.now.to_s
+      directory = 'public/binaries/'
+      path = File.join(directory, name)
+      File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }.nil?
+      @binary.path = path
+    rescue
+      flash[:alert] = 'Impossible de sauvegarder le binaire'
     end
+
+    flash[:notice] =  'Binary was successfully created' if @binary.save
+    redirect_to binaries_path
   end
 
   # PATCH/PUT /binaries/1
@@ -62,13 +65,13 @@ class BinariesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_binary
-      @binary = Binary.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_binary
+    @binary = Binary.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def binary_params
-      params[:binary]
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def binary_params
+    params.require(:binary).permit(:name, :path)
+  end
 end
