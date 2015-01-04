@@ -10,6 +10,7 @@ gem 'turbolinks'
 gem 'jbuilder'
 gem 'spring'
 gem 'devise'
+gem 'bootstrap-sass'
 
 #For Windows
 gem 'tzinfo-data'
