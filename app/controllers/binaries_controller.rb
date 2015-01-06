@@ -43,15 +43,19 @@ class BinariesController < ApplicationController
   # PATCH/PUT /binaries/1
   # PATCH/PUT /binaries/1.json
   def update
-    respond_to do |format|
-      if @binary.update(binary_params)
-        format.html { redirect_to @binary, notice: 'Binary was successfully updated.' }
-        format.json { render :show, status: :ok, location: @binary }
-      else
-        format.html { render :edit }
-        format.json { render json: @binary.errors, status: :unprocessable_entity }
-      end
+    @binary.assign_attributes(binary_params)
+    begin
+      name = params[:binary][:path].original_filename + '_' + Time.now.to_s
+      directory = 'public/binaries/'
+      path = File.join(directory, name)
+      File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }.nil?
+      @binary.path = path
+    rescue
+      flash[:alert] = 'Impossible de sauvegarder le binaire'
     end
+
+    flash[:notice] =  'Binary was successfully created' if @binary.save
+    redirect_to binaries_path
   end
 
   # DELETE /binaries/1
