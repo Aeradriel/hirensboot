@@ -25,8 +25,15 @@ class WindowsImagesController < ApplicationController
   # POST /windows_images
   # POST /windows_images.json
   def create
-    @windows_image = WindowsImage.new(windows_image_params)
+    @windows_image = WindowsImage.new(name: params[:name])
 
+    params[:binaries].each do |binary|
+      @windows_image.binaries << Binary.new(name: binary.name, path: binary.path)
+    end
+    begin
+      # !TODO: generate ISO
+    rescue
+    end
     respond_to do |format|
       if @windows_image.save
         format.html { redirect_to @windows_image, notice: 'Windows image was successfully created.' }
@@ -70,6 +77,6 @@ class WindowsImagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def windows_image_params
-      params[:windows_image]
+      params.require(:windows_image).permit(:name, :binaries)
     end
 end

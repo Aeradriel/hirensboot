@@ -1,16 +1,18 @@
 Rails.application.routes.draw do
+  get 'home/index'
+
   resources :binaries
 
   devise_for :users
 
   authenticate :user do
-    root 'windows_images#index', as: 'unauthenticated_root'
+    root 'home#index', as: 'authenticated_root'
     resources :windows_images
   end
 
   unauthenticated :user do
     scope :devise do
-      root 'devise/sessions#new', as: 'authenticated_root'
+      root 'devise/sessions#new', as: 'unauthenticated_root'
     end
   end
 
