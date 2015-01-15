@@ -15,34 +15,48 @@ class WindowsImagesController < ApplicationController
   # GET /windows_images/new
   def new
     @windows_image = WindowsImage.new
-    @binaries = []
+    @binaries = {}
+    Binary.all.each do |binary|
+      @binaries[binary.name.to_sym] = binary.id
+    end
   end
 
   # GET /windows_images/1/edit
   def edit
+    @binaries = {}
+    Binary.all.each do |binary|
+      @binaries[binary.name.to_sym] = binary.id
+    end
   end
 
   # POST /windows_images
   # POST /windows_images.json
   def create
-    @windows_image = WindowsImage.new(name: params[:name])
+    @windows_image = WindowsImage.new(windows_image_params)
 
-    params[:binaries].each do |binary|
-      @windows_image.binaries << Binary.new(name: binary.name, path: binary.path)
+    cmd = [
+        "CALL copype x86 C:\\WinPE_x86",
+        "CALL Dism /Mount-Image /ImageFile:\"C:\\WinPE_x86\\media\\sources\\boot.wim\" /index:1 /MountDir:\"C:\\WinPE_x86\\mount\""
+    ]
+    @windows_image.binaries.each do |binary|
+      cmd << "CALL md \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\""
+      cmd << "CALL Xcopy C:\\#{binary.name} \"C:\\WinPE_amd64\\mount\\windows\\#{binary.name}\""
     end
+    cmd << "CALL Dism /Unmount-Image /MountDir:\"C:\\WinPE_x86\\mount\" /commit"
+    cmd << "CALL MakeWinPEMedia /ISO C:\\WinPE_x86 C:\\WinPE_#{Time.now.to_i.to_s}.iso"
+    batch_path = ADK_BAT_FILE_PATH + ADK_BAT_FILE_NAME
+
     begin
-      # !TODO: generate ISO
-    rescue
-    end
-    respond_to do |format|
-      if @windows_image.save
-        format.html { redirect_to @windows_image, notice: 'Windows image was successfully created.' }
-        format.json { render :show, status: :created, location: @windows_image }
-      else
-        format.html { render :new }
-        format.json { render json: @windows_image.errors, status: :unprocessable_entity }
+      system("echo. >> #{batch_path}")
+      render text: cmd.inspect
+      cmd.each do |cmd_i|
+        system("echo #{cmd_i} >> #{batch_path}")
       end
+      system("C:\\WINDOWS\\system32\\cmd.exe /k #{batch_path}")
+    rescue Exception => e
+      render text: e.to_s
     end
+
   end
 
   # PATCH/PUT /windows_images/1
@@ -70,13 +84,13 @@ class WindowsImagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_windows_image
-      @windows_image = WindowsImage.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_windows_image
+    @windows_image = WindowsImage.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def windows_image_params
-      params.require(:windows_image).permit(:name, :binaries)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def windows_image_params
+    params.require(:windows_image).permit(:name, :binaries)
+  end
 end
