@@ -22,8 +22,10 @@ class WindowsImagesController < ApplicationController
   end
 
   def download_image
-    Thread.new do
+    if @windows_image.user.id == current_user.id
       send_file @windows_image.path
+    else
+      redirect_to unauthenticated_root_path
     end
   end
 
