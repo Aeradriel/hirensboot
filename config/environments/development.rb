@@ -37,6 +37,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  ADK_BAT_FILE_PATH = 'D:\\ADK\\"Assessment and Deployment Kit\Deployment Tools"\\'
   ADK_BAT_FILE_NAME = 'DandISetEnv.bat'
+  ISO_DIRECTORY_PATH = Rails.public_path
 end

@@ -38,25 +38,36 @@ class WindowsImagesController < ApplicationController
         "CALL copype x86 C:\\WinPE_x86",
         "CALL Dism /Mount-Image /ImageFile:\"C:\\WinPE_x86\\media\\sources\\boot.wim\" /index:1 /MountDir:\"C:\\WinPE_x86\\mount\""
     ]
-    @windows_image.binaries.each do |binary|
-      cmd << "CALL md \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\""
-      cmd << "CALL Xcopy C:\\#{binary.name} \"C:\\WinPE_amd64\\mount\\windows\\#{binary.name}\""
-    end
-    cmd << "CALL Dism /Unmount-Image /MountDir:\"C:\\WinPE_x86\\mount\" /commit"
-    cmd << "CALL MakeWinPEMedia /ISO C:\\WinPE_x86 C:\\WinPE_#{Time.now.to_i.to_s}.iso"
-    batch_path = ADK_BAT_FILE_PATH + ADK_BAT_FILE_NAME
-
-    begin
-      system("echo. >> #{batch_path}")
-      render text: cmd.inspect
-      cmd.each do |cmd_i|
-        system("echo #{cmd_i} >> #{batch_path}")
+    @windows_image.path = "#{ISO_DIRECTORY_PATH}/WinPE_#{Time.now.to_i}.iso"
+    thread = Thread.new do
+      @windows_image.binaries.each do |binary|
+        cmd << "CALL md \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\""
+        cmd << "CALL Xcopy C:\\#{binary.name} \"C:\\WinPE_amd64\\mount\\windows\\#{binary.name}\""
       end
-      system("C:\\WINDOWS\\system32\\cmd.exe /k #{batch_path}")
-    rescue Exception => e
-      render text: e.to_s
+      cmd << "CALL Dism /Unmount-Image /MountDir:\"C:\\WinPE_x86\\mount\" /commit"
+      cmd << "CALL MakeWinPEMedia /ISO C:\\WinPE_x86 #{@windows_image.path}"
+      cmd << 'exit'
+      batch_path = Rails.public_path + ADK_BAT_FILE_NAME
+      script_path = "#{Rails.public_path}/#{Time.now.to_i}#{ADK_BAT_FILE_NAME}"
+      FileUtils.cp batch_path, script_path
+      begin
+        system("echo. >> #{script_path}")
+        cmd.each do |cmd_i|
+          system("echo #{cmd_i} >> #{script_path}")
+        end
+        system("C:\\WINDOWS\\system32\\cmd.exe /k #{script_path}")
+      rescue Exception => e
+        render text: e.to_s
+      end
+      FileUtils.rm(script_path)
     end
-
+    thread.join
+    if @windows_image.save
+      flash[:info] = "L'image a bien ete cree"
+    else
+      flash[:error] = "Erreur pendant la creation de l'image"
+    end
+    redirect_to windows_images_url
   end
 
   # PATCH/PUT /windows_images/1

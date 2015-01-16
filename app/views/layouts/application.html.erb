@@ -10,7 +10,14 @@
 
 <%= flash_messages %>
 
-<%= yield %>
+<ul class="nav nav-pills nav-stacked" id="stacked-menu">
+  <li><a class="nav-container" href="<%= windows_images_path %>" id="dashboard_link">Images Windows</a></li>
+  <li><a class="nav-container" href="<%= binaries_path %>" id="countries_link">Binaires disponibles</a></li>
+</ul>
+
+<div class="content">
+  <%= yield %>
+</div>
 
 </body>
 </html>

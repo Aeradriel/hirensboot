@@ -75,4 +75,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  ADK_BAT_FILE_NAME = 'DandISetEnv.bat'
+  ISO_DIRECTORY_PATH = Rails.public_path
 end
