@@ -22,7 +22,9 @@ class WindowsImagesController < ApplicationController
   end
 
   def download_image
-    send_file @windows_image.path
+    Thread.new do
+      send_file @windows_image.path
+    end
   end
 
   # GET /windows_images/1/edit
