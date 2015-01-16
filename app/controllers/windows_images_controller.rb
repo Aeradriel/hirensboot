@@ -1,10 +1,10 @@
 class WindowsImagesController < ApplicationController
-  before_action :set_windows_image, only: [:show, :edit, :update, :destroy]
+  before_action :set_windows_image, only: [:show, :edit, :update, :destroy, :download_image]
 
   # GET /windows_images
   # GET /windows_images.json
   def index
-    @windows_images = WindowsImage.all
+    @windows_images = WindowsImage.where(user: current_user)
   end
 
   # GET /windows_images/1
@@ -39,6 +39,7 @@ class WindowsImagesController < ApplicationController
         "CALL Dism /Mount-Image /ImageFile:\"C:\\WinPE_x86\\media\\sources\\boot.wim\" /index:1 /MountDir:\"C:\\WinPE_x86\\mount\""
     ]
     @windows_image.path = "#{ISO_DIRECTORY_PATH}/WinPE_#{Time.now.to_i}.iso"
+    @windows_image.user = current_user
     thread = Thread.new do
       @windows_image.binaries.each do |binary|
         cmd << "CALL md \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\""

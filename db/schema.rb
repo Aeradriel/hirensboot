@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150104150826) do
+ActiveRecord::Schema.define(version: 20150116220740) do
 
   create_table "binaries", force: true do |t|
     t.string   "path"
@@ -51,6 +51,9 @@ ActiveRecord::Schema.define(version: 20150104150826) do
     t.string   "path"
     t.datetime "expiration_date"
     t.string   "name"
+    t.integer  "user_id"
   end
+
+  add_index "windows_images", ["user_id"], name: "index_windows_images_on_user_id"
 
 end
