@@ -27,16 +27,14 @@ class BinariesController < ApplicationController
     @binary = Binary.new(binary_params)
 
     begin
-      name = params[:binary][:path].original_filename + '_' + Time.now.to_s
-      directory = 'public/binaries/'
-      path = File.join(directory, name)
-      File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }.nil?
+      name = params[:binary][:path].original_filename
+      path = "#{Rails.public_path}/binaries/#{name}_#{Time.now.to_i}"
+      File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
       @binary.path = path
-    rescue
-      flash[:alert] = 'Impossible de sauvegarder le binaire'
+      flash[:notice] =  'Binary was successfully created' if @binary.save
+    rescue Exception => e
+      flash[:alert] = "Impossible de sauvegarder le binaire : #{e.to_s}"
     end
-
-    flash[:notice] =  'Binary was successfully created' if @binary.save
     redirect_to binaries_path
   end
 
