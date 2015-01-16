@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   authenticate :user do
     root 'home#index', as: 'authenticated_root'
-    resources :windows_images
+    resources :windows_images do
+      get '/download' => 'windows_images#download_image', as: 'download'
+    end
   end
 
   unauthenticated :user do

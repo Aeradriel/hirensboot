@@ -21,6 +21,10 @@ class WindowsImagesController < ApplicationController
     end
   end
 
+  def download_image
+    send_file @windows_image.path
+  end
+
   # GET /windows_images/1/edit
   def edit
     @binaries = {}
@@ -98,7 +102,8 @@ class WindowsImagesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_windows_image
-    @windows_image = WindowsImage.find(params[:id])
+    @windows_image = WindowsImage.find(params[:id]) if params[:id]
+    @windows_image ||= WindowsImage.find(params[:windows_image_id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
