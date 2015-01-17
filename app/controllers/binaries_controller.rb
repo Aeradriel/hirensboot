@@ -28,7 +28,8 @@ class BinariesController < ApplicationController
 
     begin
       name = params[:binary][:path].original_filename
-      path = "#{Rails.public_path}/binaries/#{name}_#{Time.now.to_i}"
+      path = "#{Rails.public_path}\\binaries\\#{Time.now.to_i}_#{name}"
+      path.gsub! '/', '\\'
       File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
       @binary.path = path
       flash[:notice] =  'Binary was successfully created' if @binary.save

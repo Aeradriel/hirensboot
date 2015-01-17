@@ -48,10 +48,13 @@ class WindowsImagesController < ApplicationController
     ]
     @windows_image.path = "#{ISO_DIRECTORY_PATH}/WinPE_#{Time.now.to_i}.iso"
     @windows_image.user = current_user
+    params[:binaries].each do |binary|
+      @windows_image.binaries << Binary.find(binary)
+    end
     thread = Thread.new do
       @windows_image.binaries.each do |binary|
         cmd << "CALL md \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\""
-        cmd << "CALL Xcopy C:\\#{binary.name} \"C:\\WinPE_amd64\\mount\\windows\\#{binary.name}\""
+        cmd << "CALL Xcopy \"#{binary.path}\" \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\\\""
       end
       cmd << "CALL Dism /Unmount-Image /MountDir:\"C:\\WinPE_x86\\mount\" /commit"
       cmd << "CALL MakeWinPEMedia /ISO C:\\WinPE_x86 #{@windows_image.path}"
@@ -69,6 +72,7 @@ class WindowsImagesController < ApplicationController
         render text: e.to_s
       end
       FileUtils.rm(script_path)
+      FileUtils.rm_rf("C:\\WinPE_x86")
     end
     thread.join
     if @windows_image.save
