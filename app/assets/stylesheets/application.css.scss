@@ -16,19 +16,39 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import url('http://fonts.googleapis.com/css?family=Oswald');
 
-.alert {
-  width: 95%;
-  margin: 15px auto 15px auto;
-}
+body {
+  font-family: 'Oswald', sans-serif !important;
 
-.content {
-  margin-left: 12%;
-}
+  header {
+    margin-top: 0;
+    height: 150px;
+    background-color: grey;
+  }
+  
+  .alert {
+    width: 95%;
+    margin: 15px auto 15px auto;
+  }
 
-.nav-pills {
-  position: absolute;
-  float: left;
-  width: 10%;
-  height: 100%;
+  .content {
+    margin-left: 12%;
+  }
+
+  .nav-pills {
+    position: absolute;
+    float: left;
+    width: 10%;
+    height: 100%;
+  }
+
+  .btn:visited {
+    color: white;
+  }
+
+  .panel {
+    display: inline-block;
+    min-width: 50%;
+  }
 }
