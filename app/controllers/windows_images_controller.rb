@@ -1,18 +1,13 @@
 class WindowsImagesController < ApplicationController
   before_action :set_windows_image, only: [:show, :edit, :update, :destroy, :download_image]
 
-  # GET /windows_images
-  # GET /windows_images.json
   def index
     @windows_images = WindowsImage.where(user: current_user)
   end
 
-  # GET /windows_images/1
-  # GET /windows_images/1.json
   def show
   end
 
-  # GET /windows_images/new
   def new
     @windows_image = WindowsImage.new
     @binaries = {}
@@ -23,13 +18,17 @@ class WindowsImagesController < ApplicationController
 
   def download_image
     if @windows_image.user.id == current_user.id
-      send_file @windows_image.path
+      begin
+        send_file @windows_image.path
+      rescue
+        flash[:error] = 'Impossible de télécharger le fichier. Celui-ci est a peut-être été supprimé.'
+        redirect_to windows_images_path
+      end
     else
       redirect_to unauthenticated_root_path
     end
   end
 
-  # GET /windows_images/1/edit
   def edit
     @binaries = {}
     Binary.all.each do |binary|
@@ -37,8 +36,6 @@ class WindowsImagesController < ApplicationController
     end
   end
 
-  # POST /windows_images
-  # POST /windows_images.json
   def create
     @windows_image = WindowsImage.new(windows_image_params)
 
@@ -83,8 +80,6 @@ class WindowsImagesController < ApplicationController
     redirect_to windows_images_url
   end
 
-  # PATCH/PUT /windows_images/1
-  # PATCH/PUT /windows_images/1.json
   def update
     respond_to do |format|
       if @windows_image.update(windows_image_params)
@@ -97,8 +92,6 @@ class WindowsImagesController < ApplicationController
     end
   end
 
-  # DELETE /windows_images/1
-  # DELETE /windows_images/1.json
   def destroy
     @windows_image.destroy
     respond_to do |format|
@@ -108,13 +101,11 @@ class WindowsImagesController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_windows_image
     @windows_image = WindowsImage.find(params[:id]) if params[:id]
     @windows_image ||= WindowsImage.find(params[:windows_image_id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def windows_image_params
     params.require(:windows_image).permit(:name, :binaries)
   end
