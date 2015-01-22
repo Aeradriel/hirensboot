@@ -14,11 +14,11 @@
     <div class="fields">
       <ul>
         <li class="field">
-          <%= f.label 'Nom', :name %>
+          <%= f.label :name, 'Nom' %>
           <%= f.text_field :name %>
         </li>
         <li class="field">
-          <%= label_tag 'Programmes', :binaries %>
+          <%= label_tag :binaries, 'Programmes' %>
           <%= select_tag :binaries, options_for_select(@binaries), multiple: true %>
         </li>
       </ul>
