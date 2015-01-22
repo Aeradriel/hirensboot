@@ -15,3 +15,7 @@
 //= require turbolinks
 //= require bootstrap
 //= require_tree .
+
+$('.action input').click(function() {
+    $('#loader').css({'display': 'block'});
+});
