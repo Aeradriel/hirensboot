@@ -16,6 +16,8 @@
 //= require bootstrap
 //= require_tree .
 
-$('.action input').click(function() {
-    $('#loader').css({'display': 'block'});
+$(document).ready(function() {
+    $('.actions input').click(function () {
+        $('#loader').css({'display': 'block'});
+    });
 });
