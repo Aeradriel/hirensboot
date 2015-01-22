@@ -47,7 +47,7 @@ class WindowsImagesController < ApplicationController
     @windows_image.user = current_user
     params[:binaries].each do |binary|
       @windows_image.binaries << Binary.find(binary)
-    end
+    end if params[:binaries]
     thread = Thread.new do
       @windows_image.binaries.each do |binary|
         cmd << "CALL md \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\""
