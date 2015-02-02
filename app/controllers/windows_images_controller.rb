@@ -93,6 +93,7 @@ class WindowsImagesController < ApplicationController
   end
 
   def destroy
+    FileUtils.rm_f(@windows_image.path)
     @windows_image.destroy
     respond_to do |format|
       format.html { redirect_to windows_images_url, notice: 'Windows image was successfully destroyed.' }

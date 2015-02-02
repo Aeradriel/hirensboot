@@ -1,5 +1,6 @@
 class BinariesController < ApplicationController
-  before_action :set_binary, only: [:show, :edit, :update, :destroy]
+  before_action :set_binary, only: [:show, :edit, :update,
+                                    :destroy, :download]
 
   # GET /binaries
   # GET /binaries.json
@@ -60,6 +61,7 @@ class BinariesController < ApplicationController
   # DELETE /binaries/1
   # DELETE /binaries/1.json
   def destroy
+    FileUtils.rm_f(@binary.path)
     @binary.destroy
     respond_to do |format|
       format.html { redirect_to binaries_url, notice: 'Binary was successfully destroyed.' }
@@ -67,10 +69,21 @@ class BinariesController < ApplicationController
     end
   end
 
+  def download
+    begin
+      send_file @binary.path
+    rescue
+      flash[:error] = 'Impossible de télécharger le fichier. Celui-ci est a peut-être été supprimé.'
+      redirect_to windows_images_path
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_binary
-    @binary = Binary.find(params[:id])
+    @binary = Binary.find(params[:id]) if params[:id]
+    @binary ||= Binary.find(params[:binary_id])
+
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
