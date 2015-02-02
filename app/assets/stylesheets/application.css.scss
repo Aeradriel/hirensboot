@@ -22,9 +22,15 @@ body {
   font-family: 'Oswald', sans-serif !important;
 
   header {
-    margin-top: 0;
     height: 150px;
-    background-color: grey;
+    margin-top: -25px;
+    background-color: #337ab7;
+
+    h1 {
+      padding-top: 55px;
+      padding-left: 15px;
+      color: white;
+    }
   }
 
   #loader {
