@@ -46,15 +46,14 @@ class BinariesController < ApplicationController
     @binary.assign_attributes(binary_params)
     begin
       name = params[:binary][:path].original_filename + '_' + Time.now.to_s
-      directory = 'public/binaries/'
-      path = File.join(directory, name)
-      File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }.nil?
+      path = "#{Rails.public_path}\\binaries\\#{Time.now.to_i}_#{name}"
+      path.gsub! '/', '\\'
+      File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
       @binary.path = path
-    rescue
+      flash[:notice] =  'Binary was successfully created' if @binary.save
+      rescue
       flash[:alert] = 'Impossible de sauvegarder le binaire'
     end
-
-    flash[:notice] =  'Binary was successfully created' if @binary.save
     redirect_to binaries_path
   end
 

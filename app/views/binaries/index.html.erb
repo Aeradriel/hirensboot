@@ -6,7 +6,8 @@
     <% @binaries.each do |binary| %>
         <tr>
           <td><%= binary.name %></td>
-          <td><%= link_to 'Télécharger', "/binaries/#{binary.id}/download", class: 'btn btn-warning' %>
+          <td><%= link_to 'Éditer', "/binaries/#{binary.id}/edit", class: 'btn btn-success' %>
+              <%= link_to 'Télécharger', "/binaries/#{binary.id}/download", class: 'btn btn-warning' %>
               <%= link_to 'Supprimer', binary, method: :delete, data: { confirm: 'Attention, cela est irréversible' }, class: 'btn btn-danger' if current_user.admin %></td>
         </tr>
     <% end %>
