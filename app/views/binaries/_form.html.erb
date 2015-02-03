@@ -11,20 +11,20 @@
         </div>
     <% end %>
 
-    <div class="fields">
-      <ul>
-        <li class="field">
-          <%= f.label :name, 'Nom' %>
-          <%= f.text_field :name %>
-        </li>
-        <li class="field">
-          <%= f.label :path, 'Binaire' %>
-          <%= f.file_field :path %>
-        </li>
-      </ul>
-    </div>
-
-    <div class="actions">
-      <%= f.submit %>
+    <div class="panel panel-primary">
+      <div class="panel-heading">Informations sur le binaire</div>
+      <table class="table">
+        <tr>
+          <td><%= f.label :name, 'Nom' %></td>
+          <td><%= f.text_field :name %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :path, 'Binaire' %></td>
+          <td><%= f.file_field :path %></td>
+        </tr>
+        <tr>
+          <td colspan="2"><%= f.submit %></td>
+        </tr>
+      </table>
     </div>
 <% end %>
