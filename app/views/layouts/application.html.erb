@@ -18,11 +18,13 @@
   <%= image_tag 'ajax-loader.gif' %>
 </div>
 
-
-<ul class="nav nav-pills nav-stacked" id="stacked-menu">
-  <li><a class="nav-container" href="<%= windows_images_path %>" id="dashboard_link">Images Windows</a></li>
-  <li><a class="nav-container" href="<%= binaries_path %>" id="countries_link">Binaires disponibles</a></li>
-</ul>
+<% if user_signed_in? %>
+    <ul class="nav nav-pills nav-stacked" id="stacked-menu">
+      <li><a class="nav-container" href="<%= windows_images_path %>" id="dashboard_link">Images Windows</a></li>
+      <li><a class="nav-container" href="<%= binaries_path %>" id="countries_link">Binaires disponibles</a></li>
+      <li><a class="nav-container" href="<%= destroy_user_session_path %>" id="logout_link" data-method="delete">Se déconnecter</a></li>
+    </ul>
+<% end %>
 
 <div class="content">
   <%= yield %>
