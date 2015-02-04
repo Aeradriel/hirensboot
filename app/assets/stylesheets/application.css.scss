@@ -33,6 +33,11 @@ body {
     }
   }
 
+  select {
+    height: 300px !important;
+    width: 300px !important;
+  }
+
   #loader {
     z-index: 100;
     position: absolute;

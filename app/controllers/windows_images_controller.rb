@@ -11,7 +11,8 @@ class WindowsImagesController < ApplicationController
   def new
     @windows_image = WindowsImage.new
     @binaries = {}
-    Binary.all.each do |binary|
+    binaries = Binary.all.sort { |a,b| a.name.downcase <=> b.name.downcase }
+    binaries.each do |binary|
       @binaries[binary.name.to_sym] = binary.id
     end
   end
