@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   authenticate :user do
-    root 'home#index', as: 'authenticated_root'
+    root 'windows_images#index', as: 'authenticated_root'
     resources :windows_images do
       get '/download' => 'windows_images#download_image', as: 'download'
     end

@@ -28,12 +28,16 @@ class BinariesController < ApplicationController
     @binary = Binary.new(binary_params)
 
     begin
-      name = params[:binary][:path].original_filename
+      name = params[:binary][:path].original_filename + '_' + Time.now.to_i.to_s
       path = "#{Rails.public_path}\\binaries\\#{Time.now.to_i}_#{name}"
       path.gsub! '/', '\\'
       File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
       @binary.path = path
-      flash[:notice] =  'Binary was successfully created' if @binary.save
+      if @binary.save
+        flash[:notice] =  'Binary was successfully edited'
+      else
+        flash[:alert] = 'Impossible de sauvegarder le binaire'
+      end
     rescue Exception => e
       flash[:alert] = "Impossible de sauvegarder le binaire : #{e.to_s}"
     end
@@ -43,15 +47,21 @@ class BinariesController < ApplicationController
   # PATCH/PUT /binaries/1
   # PATCH/PUT /binaries/1.json
   def update
-    @binary.assign_attributes(binary_params)
+    @binary.name = params[:binary][:name]
     begin
-      name = params[:binary][:path].original_filename + '_' + Time.now.to_s
-      path = "#{Rails.public_path}\\binaries\\#{Time.now.to_i}_#{name}"
-      path.gsub! '/', '\\'
-      File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
-      @binary.path = path
-      flash[:notice] =  'Binary was successfully created' if @binary.save
-    rescue
+      if params[:binary][:path]
+        name = params[:binary][:path].original_filename + '_' + Time.now.to_i.to_s
+        path = "#{Rails.public_path}\\binaries\\#{Time.now.to_i}_#{name}"
+        path.gsub! '/', '\\'
+        File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
+        @binary.path = path
+      end
+      if @binary.save
+        flash[:notice] =  'Binary was successfully edited'
+      else
+        flash[:alert] = "Impossible de sauvegarder le binaire"
+      end
+    rescue Exception => e
       flash[:alert] = 'Impossible de sauvegarder le binaire'
     end
     redirect_to binaries_path
