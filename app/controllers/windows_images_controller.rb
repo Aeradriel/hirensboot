@@ -21,7 +21,7 @@ class WindowsImagesController < ApplicationController
       begin
         send_file @windows_image.path
       rescue
-        flash[:error] = 'Impossible de télécharger le fichier. Celui-ci est a peut-être été supprimé.'
+        flash[:error] = 'Impossible de telecharger le fichier. Celui-ci est a peut-etre ete supprime.'
         redirect_to windows_images_path
       end
     else

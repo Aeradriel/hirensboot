@@ -6,12 +6,12 @@
     <% @windows_images.each do |windows_image| %>
         <tr>
           <td><%= windows_image.name %></td>
-          <td><%= link_to 'Télécharger', "/windows_images/#{windows_image.id}/download", class: 'btn btn-warning' %>
-          <%= link_to 'Supprimer', windows_image, method: :delete, data: { confirm: 'Attention, cela est irréversible' }, class: 'btn btn-danger' %></td>
+          <td><%= link_to 'Telecharger', "/windows_images/#{windows_image.id}/download", class: 'btn btn-warning' %>
+          <%= link_to 'Supprimer', windows_image, method: :delete, data: { confirm: 'Attention, cela est irreversible' }, class: 'btn btn-danger' %></td>
         </tr>
     <% end %>
     </tbody>
   </table>
 </div>
 <br/>
-<%= link_to 'Créer une image', new_windows_image_path, class: 'btn btn-success btn-large btn-new' %>
+<%= link_to 'Creer une image', new_windows_image_path, class: 'btn btn-success btn-large btn-new' %>

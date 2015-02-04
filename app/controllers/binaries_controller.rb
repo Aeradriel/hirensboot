@@ -51,7 +51,7 @@ class BinariesController < ApplicationController
       File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
       @binary.path = path
       flash[:notice] =  'Binary was successfully created' if @binary.save
-      rescue
+    rescue
       flash[:alert] = 'Impossible de sauvegarder le binaire'
     end
     redirect_to binaries_path
@@ -72,7 +72,7 @@ class BinariesController < ApplicationController
     begin
       send_file @binary.path
     rescue
-      flash[:error] = 'Impossible de télécharger le fichier. Celui-ci est a peut-être été supprimé.'
+      flash[:error] = 'Impossible de telecharger le fichier. Celui-ci est a peut-etre ete supprime.'
       redirect_to windows_images_path
     end
   end
@@ -82,7 +82,6 @@ class BinariesController < ApplicationController
   def set_binary
     @binary = Binary.find(params[:id]) if params[:id]
     @binary ||= Binary.find(params[:binary_id])
-
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
