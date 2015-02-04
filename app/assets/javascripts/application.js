@@ -17,7 +17,7 @@
 //= require_tree .
 
 $(document).ready(function() {
-    $('.actions input').click(function () {
+    $('.submit-image:first-child').click(function () {
         $('#loader').css({'display': 'block'});
     });
 });

@@ -12,19 +12,19 @@
     <% end %>
 
 
-    <div class="panel panel-primary">
+    <div class="panel panel-primary submit-image">
       <div class="panel-heading">Informations sur le binaire</div>
       <table class="table">
         <tr>
           <td><%= f.label :name, 'Nom' %></td>
-          <td><%= f.text_field :name   , :class => "form-control"  %></td>
+          <td><%= f.text_field :name, :class => "form-control"  %></td>
         </tr>
         <tr>
           <td><%= f.label :path, 'Binaire' %></td>
           <td><%= select_tag :binaries, options_for_select(@binaries), multiple: true %></td>
         </tr>
         <tr>
-          <td colspan="2"><%= f.submit %></td>
+          <td colspan="2" class="submit-image"><%= f.submit %></td>
         </tr>
       </table>
     </div>
