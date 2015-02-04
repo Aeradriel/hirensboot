@@ -5,7 +5,7 @@ class BinariesController < ApplicationController
   # GET /binaries
   # GET /binaries.json
   def index
-    @binaries = Binary.all
+    @binaries = Binary.all.sort { |a,b| a.name.downcase <=> b.name.downcase }
   end
 
   # GET /binaries/1
