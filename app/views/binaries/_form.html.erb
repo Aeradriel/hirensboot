@@ -16,14 +16,14 @@
       <table class="table">
         <tr>
           <td><%= f.label :name, 'Nom' %></td>
-          <td><%= f.text_field :name %></td>
+          <td><%= f.text_field :name , :class => "form-control" %></td>
         </tr>
         <tr>
           <td><%= f.label :path, 'Binaire' %></td>
           <td><%= f.file_field :path %></td>
         </tr>
         <tr>
-          <td colspan="2"><%= f.submit %></td>
+          <td colspan="2"><%= f.submit "Créer un binaire", :class => "btn btn-success" %></td>
         </tr>
       </table>
     </div>
