@@ -33,6 +33,7 @@ class BinariesController < ApplicationController
       path.gsub! '/', '\\'
       File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
       @binary.path = path
+      @binary.zip = true if File.extname(params[:binary][:path].original_filename) == '.zip'
       if @binary.save
         flash[:notice] =  'Binary was successfully edited'
       else
@@ -55,6 +56,9 @@ class BinariesController < ApplicationController
         path.gsub! '/', '\\'
         File.open(path, 'wb') { |f| f.write(params[:binary][:path].read) }
         @binary.path = path
+      end
+      if File.extname(params[:binary][:path].original_filename) == '.zip'
+        @binary.zip = true
       end
       if @binary.save
         flash[:notice] =  'Binary was successfully edited'

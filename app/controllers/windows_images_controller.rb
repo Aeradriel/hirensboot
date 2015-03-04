@@ -1,4 +1,6 @@
 class WindowsImagesController < ApplicationController
+  include WindowsImagesHelper
+
   before_action :set_windows_image, only: [:show, :edit, :update, :destroy, :download_image]
 
   def index
@@ -40,6 +42,7 @@ class WindowsImagesController < ApplicationController
   def create
     @windows_image = WindowsImage.new(windows_image_params)
 
+    tmp_dir = ""
     cmd = [
         "CALL copype x86 C:\\WinPE_x86",
         "CALL Dism /Mount-Image /ImageFile:\"C:\\WinPE_x86\\media\\sources\\boot.wim\" /index:1 /MountDir:\"C:\\WinPE_x86\\mount\""
@@ -52,7 +55,14 @@ class WindowsImagesController < ApplicationController
     thread = Thread.new do
       @windows_image.binaries.each do |binary|
         cmd << "CALL md \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\""
-        cmd << "CALL Xcopy \"#{binary.path}\" \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\\\""
+        if binary.zip
+          tmp_dir = "#{Rails.public_path}/tmp_binary" + Time.now.to_i.to_s
+          Dir.mkdir(tmp_dir)
+          extract_zip_to(binary.path, tmp_dir)
+          cmd << "CALL Xcopy \"#{tmp_dir}\" \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\\\""
+        else
+          cmd << "CALL Xcopy \"#{binary.path}\" \"C:\\WinPE_x86\\mount\\windows\\#{binary.name}\\ /s /e\""
+        end
       end
       cmd << "CALL Dism /Unmount-Image /MountDir:\"C:\\WinPE_x86\\mount\" /commit"
       cmd << "CALL MakeWinPEMedia /ISO C:\\WinPE_x86 #{@windows_image.path}"
@@ -78,6 +88,7 @@ class WindowsImagesController < ApplicationController
     else
       flash[:error] = "Erreur pendant la creation de l'image"
     end
+    FileUtils.rm_rf(tmp_dir)
     redirect_to windows_images_url
   end
 

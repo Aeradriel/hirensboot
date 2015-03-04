@@ -11,6 +11,7 @@ gem 'jbuilder'
 gem 'spring'
 gem 'devise'
 gem 'bootstrap-sass'
+gem 'rubyzip'
 
 #For Windows
 gem 'tzinfo-data'

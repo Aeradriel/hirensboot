@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150202213220) do
+ActiveRecord::Schema.define(version: 20150304192934) do
 
   create_table "binaries", force: true do |t|
     t.string   "path"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "zip",        default: false
   end
 
   create_table "users", force: true do |t|
